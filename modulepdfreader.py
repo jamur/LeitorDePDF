@@ -1,11 +1,9 @@
 import PyPDF2
-import re
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
 import concurrent.futures
 import time
-from progressbar import progressbar
 from alive_progress import alive_bar
 
 class PDFReader():
