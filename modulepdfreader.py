@@ -4,7 +4,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
 #import logging
-#import concurrent.futures
+import concurrent.futures
 import threading
 import time
 from progressbar import progressbar
@@ -166,7 +166,7 @@ class PDFReader():
 		return row
 
 	# based on self.
-	def readYFDataRowsThread(self,qt=0) -> list:
+	def readYFDataRowsThreadBak(self,qt=0) -> list:
 		self.yfDataRows = []
 		threads = list()
 		#logging.info("Runing threads")
@@ -207,6 +207,39 @@ class PDFReader():
 		#	self.addYFRow(yfDataRows, company)
 		return self.yfDataRows
 
+	def readYFDataRowsThread(self,qt=0) -> list:
+		self.yfDataRows = []
+		if qt:
+			companies = self.companies[:qt]
+		else:
+			companies = self.companies
+		threads = list()
+		#logging.info("Runing threads")
+		if not(qt): # if no qt then qt = total
+			qt = len(self.companies)
+		print("Creating Threads...")
+		with concurrent.futures.ThreadPoolExecutor() as exe:
+	       	# issue some tasks and collect futures
+			futures = [exe.submit(self.addYFRow, companie) for companie in companies]
+
+			with alive_bar(qt) as bar:
+	        	# handle results as tasks are completed
+				for future in concurrent.futures.as_completed(futures):
+					#print(f'>got {future.result}')
+					bar()
+
+			#with alive_bar(qt) as bar:
+			#	# issue one task for each call to the function
+			#	for result in exe.map(self.addYFRow, companies):
+			#		#print(f'>got {result}')
+			#		bar()
+
+
+    	# report that all tasks are completed
+		print('Done')
+		return self.yfDataRows
+
+
 	def readYFDataRowsNoThread(self, qt=0) -> list:
 		self.yfDataRows = []
 		#logging.info(self.companies)
@@ -244,11 +277,11 @@ class PDFReader():
 
 
 if __name__ == "__main__":
-	qt =  15
+	qt =  0
 	pdf_reader = PDFReader('ru2000_membershiplist_20220624_0.pdf')
-	companies = pdf_reader.readCompanies()
+	pdf_reader.readCompanies()
 	start_time = time.perf_counter()
-	df_yf_data = pdf_reader.readYFDataRows(qt=qt)
+	pdf_reader.readYFDataRows(thread=True, qt=qt)
 	end_time = time.perf_counter()
 	execution_time = end_time - start_time
 	print(f"The execution time is: {execution_time}")
