@@ -46,6 +46,7 @@ class PDFReader():
 						self.addCompany(companies, company, ticker)
 
 					celNumber += 2
+
 			else: # cab = "Company Ticker" - Method to discover other pattern of page
 				# No break lines in page 10
 				# cabs
@@ -58,6 +59,7 @@ class PDFReader():
 					ticker = subCel[1]
 					if company != "Company": # test if cab
 						self.addCompany(companies, company, ticker)
+
 					celNumber += 1
 
 			if ended:
@@ -109,24 +111,16 @@ class PDFReader():
 		ipo = ipo.strftime("%d/%m/%Y")
 		row = [company, ticker, ipo, firstValue, lastValue, lastDate, howMuchPercent]
 		self.yfDataRows.append(row)
-		#logging.info( company + " | " + ticker + " | ̭̭" + str(ipo) + " | ̭̭" +
-		#		str(firstValue) + " | ̭̭" + str(lastValue) + " | ̭̭" + 
-		#		str(lastDate) + " | ̭̭" + str(howMuchPercent))
-		#ipo = "N/D"
-		#firstValue = "N/D"
-		#lastValue = "N/D"
-		#lastDate = "N/D"
-		#howMuchPercent = "N/D"
-		# add row in the list
 		return row
 
 	def readYFDataRowsThread(self,qt=0) -> list:
 		self.yfDataRows = []
+
 		if qt:
 			companies = self.companies[:qt]
 		else:
 			companies = self.companies
-		threads = list()
+
 		if not(qt): # if no qt then qt = total
 			qt = len(self.companies)
 		with concurrent.futures.ThreadPoolExecutor() as exe:
@@ -135,14 +129,15 @@ class PDFReader():
 			futures = [exe.submit(self.addYFRow, companie) for companie in companies]
 			print("Executing Threads...")
 			with alive_bar(qt) as bar:
+
 	        	# update bar as tasks are completed
 				for future in concurrent.futures.as_completed(futures):
+
 					bar()
 
     	# report that all tasks are completed
 		print('Done.')
 		return self.yfDataRows
-
 
 	def readYFDataRowsNoThread(self, qt=0) -> list:
 		self.yfDataRows = []
