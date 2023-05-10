@@ -217,11 +217,11 @@ class PDFReader():
 		#logging.info("Runing threads")
 		if not(qt): # if no qt then qt = total
 			qt = len(self.companies)
-		print("Creating Threads...")
 		with concurrent.futures.ThreadPoolExecutor() as exe:
 	       	# issue some tasks and collect futures
+			print("Creating Threads...")
 			futures = [exe.submit(self.addYFRow, companie) for companie in companies]
-
+			print("Executing Threads...")
 			with alive_bar(qt) as bar:
 	        	# handle results as tasks are completed
 				for future in concurrent.futures.as_completed(futures):
@@ -284,7 +284,8 @@ if __name__ == "__main__":
 	pdf_reader.readYFDataRows(thread=True, qt=qt)
 	end_time = time.perf_counter()
 	execution_time = end_time - start_time
-	print(f"The execution time is: {execution_time}")
+	execution_time_str = time.strftime("%H:%M:%S", time.gmtime(execution_time))
+	print(f"The execution time is: {execution_time_str}")
 	pdf_reader.saveExcel('CompaniesGrowing.xlsx')
 
 	# More than half more time
