@@ -120,6 +120,7 @@ class PDFReader():
 		ipo = datetime.utcfromtimestamp(firstUTC).date()
 		# ipo = history.index[0].date() # .tz_localize(None).date() # removed timezone because excel don't support
 		history = co.history(start=ipo, end=ipo + timedelta(1))
+
 		try:
 			firstValue = history.iloc[0,0]
 		except:
@@ -142,14 +143,14 @@ class PDFReader():
 		#	lastDate = None
 		lastDate = None
 
-		if firstValue != 0:
+		if firstValue and lastValue:
 			howMuchPercent = ((lastValue - firstValue) / firstValue) * 100
 			howMuchPercent = f"{howMuchPercent:.0f}%"
+			firstValue = f"{firstValue:.2f}"
+			lastValue = f"{lastValue:.2f}"
 		else:
 			howMuchPercent = None
 
-		firstValue = f"{firstValue:.2f}"
-		lastValue = f"{lastValue:.2f}"
 		ipo = ipo.strftime("%d/%m/%Y")
 		row = [company, ticker, ipo, firstValue, lastValue, lastDate, howMuchPercent]
 		self.yfDataRows.append(row)
@@ -223,9 +224,9 @@ class PDFReader():
 		#	executor.map(self.addYFRow, companyTupleOfTuples)
 		#for company in companies:
 		#	self.addYFRow(yfDataRows, company)
-		return self.df
+		return self.yfDataRows
 
-	def readYFDataRows(self, qt=0, thread=True):
+	def readYFDataRows(self, thread=False, qt=0):
 		self.yfDataRows = []
 		#self.readYFDataRowsThread()
 		if thread:
@@ -243,15 +244,15 @@ class PDFReader():
 
 
 if __name__ == "__main__":
-	qt =  0
+	qt =  15
 	pdf_reader = PDFReader('ru2000_membershiplist_20220624_0.pdf')
 	companies = pdf_reader.readCompanies()
 	start_time = time.perf_counter()
-	df_yf_data = pdf_reader.readYFDataRows(qt, thread=False)
+	df_yf_data = pdf_reader.readYFDataRows(qt=qt)
 	end_time = time.perf_counter()
 	execution_time = end_time - start_time
 	print(f"The execution time is: {execution_time}")
-	pdf_reader.saveExcel('Thread.xlsx')
+	pdf_reader.saveExcel('CompaniesGrowing.xlsx')
 
 	# More than half more time
 	#start_time = time.perf_counter()
