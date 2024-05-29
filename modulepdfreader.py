@@ -20,30 +20,31 @@ class PDFReader():
 		return 
 	
 	# Read PDF and return companies names and tickers
-	def readCompanies(self) -> list:
-		companies = []
+	def readPeople(self) -> list:
+		people = []
 		pageNumber = 0
 		# Read until find end strings
 		while True:
 			page = self.pages[pageNumber]
 			page_content = page.extract_text()
 			parsed = ''.join(page_content)
-			cels = parsed.split('\n')
-			celNumber = 0
-			cab = (cels[celNumber])
-			if cab == "Company": # pageNumber != 9: # There are break lines among
-				celNumber += 2
-				ended = False
-				while cels[celNumber] != "June 24, 2022": # Pages end string
-					if cels[celNumber] == "ftserussell.com": # End string of all
-						ended = True
-						break
-					company = cels[celNumber]
-					ticker = cels[celNumber+1]
-					if company != "Company": # test if cab
-						self.addCompany(companies, company, ticker)
+			print(parsed)
+			# cels = parsed.split('\n')
+			# celNumber = 0
+			# cab = (cels[celNumber])
+			# if cab == "Company": # pageNumber != 9: # There are break lines among
+			# 	celNumber += 2
+			# 	ended = False
+			# 	while cels[celNumber] != "June 24, 2022": # Pages end string
+			# 		if cels[celNumber] == "ftserussell.com": # End string of all
+			# 			ended = True
+			# 			break
+			# 		company = cels[celNumber]
+			# 		ticker = cels[celNumber+1]
+			# 		if company != "Company": # test if cab
+			# 			self.addCompany(people, company, ticker)
 
-					celNumber += 2
+			# 		celNumber += 2
 
 			else: # cab = "Company Ticker" - Method to discover other pattern of page
 				# No break lines in page 10
@@ -56,7 +57,7 @@ class PDFReader():
 					company = subCel[0]
 					ticker = subCel[1]
 					if company != "Company": # test if cab
-						self.addCompany(companies, company, ticker)
+						self.addCompany(people, company, ticker)
 
 					celNumber += 1
 
@@ -65,8 +66,8 @@ class PDFReader():
 
 			pageNumber += 1
 
-		self.companies = companies
-		return companies
+		self.companies = people
+		return people
 	
 	def addYFRow(self, companyRow):
 		company = companyRow[0]
@@ -164,8 +165,8 @@ class PDFReader():
 
 if __name__ == "__main__":
 	qt =  0
-	pdf_reader = PDFReader('ru2000_membershiplist_20220624_0.pdf')
-	pdf_reader.readCompanies()
+	pdf_reader = PDFReader('listagem.pdf')
+	pdf_reader.readPeople()
 	start_time = time.perf_counter()
 	pdf_reader.readYFDataRows(thread=True, qt=qt)
 	end_time = time.perf_counter()

@@ -1,0 +1,57 @@
+# 
+listagem.pdf
+
+# Diretórios e arquivos de ambientes virtuais
+venv/
+env/
+ENV/
+.venv/
+.pyenv/
+
+# Compilação de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# Diretórios de IDEs e editores de texto
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Configurações do Jupyter Notebook
+.ipynb_checkpoints
+
+# Arquivos de distribuição
+dist/
+build/
+*.egg-info/
+
+# Arquivos de pacotes
+*.egg
+*.wheel
+
+# Arquivos de cache de pytest
+.pytest_cache/
+
+# Arquivos de cobertura de código
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Arquivos de configurações pessoais
+*.ini
+*.toml
+*.yaml
+*.yml
+
+# Diretórios de desenvolvimento de Docker
+.dockerignore
+
+# Configurações locais específicas
+local_settings.py
+
