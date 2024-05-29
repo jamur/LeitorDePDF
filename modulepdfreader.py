@@ -19,7 +19,7 @@ class PDFReader():
 		companies.append(row)
 		return 
 	
-	# Read PDF and return companies names and tickers
+	# Read PDF and return people
 	def readPeople(self) -> list:
 		people = []
 		pageNumber = 0
@@ -27,8 +27,8 @@ class PDFReader():
 		while True:
 			page = self.pages[pageNumber]
 			page_content = page.extract_text()
-			parsed = ''.join(page_content)
-			print(parsed)
+			print(page_content)
+			# parsed = ''.join(page_content)
 			# cels = parsed.split('\n')
 			# celNumber = 0
 			# cab = (cels[celNumber])
@@ -46,20 +46,20 @@ class PDFReader():
 
 			# 		celNumber += 2
 
-			else: # cab = "Company Ticker" - Method to discover other pattern of page
-				# No break lines in page 10
-				# cabs
-				headers = cels[celNumber].rsplit(maxsplit=1)
-				celNumber += 1
-				while cels[celNumber][:13] != "June 24, 2022":
-					# split ticker at right
-					subCel = cels[celNumber].rsplit(maxsplit=1)
-					company = subCel[0]
-					ticker = subCel[1]
-					if company != "Company": # test if cab
-						self.addCompany(people, company, ticker)
+			# else: # cab = "Company Ticker" - Method to discover other pattern of page
+			# 	# No break lines in page 10
+			# 	# cabs
+			# 	headers = cels[celNumber].rsplit(maxsplit=1)
+			# 	celNumber += 1
+			# 	while cels[celNumber][:13] != "June 24, 2022":
+			# 		# split ticker at right
+			# 		subCel = cels[celNumber].rsplit(maxsplit=1)
+			# 		company = subCel[0]
+			# 		ticker = subCel[1]
+			# 		if company != "Company": # test if cab
+			# 			self.addCompany(people, company, ticker)
 
-					celNumber += 1
+			# 		celNumber += 1
 
 			if ended:
 				break

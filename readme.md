@@ -9,8 +9,6 @@ https://www.workana.com/job/especialista-em-excel-necessario-para-extrair-e-orga
 Sobre este projeto
 ------------------
 
-**R$ 250 - 500**
-
 Descrição:
 
 Estou procurando um profissional com experiência em Microsoft Excel e extração de dados para me ajudar a extrair informações de uma lista em PDF contendo empresas do índice Russell 2000 e organizá-las em uma planilha do Excel. As informações a serem extraídas incluem:
