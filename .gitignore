@@ -1,5 +1,7 @@
 # 
 listagem.pdf
+dados/
+.vscode
 
 # Diretórios e arquivos de ambientes virtuais
 venv/
